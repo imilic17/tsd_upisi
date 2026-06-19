@@ -1,0 +1,12 @@
+# Interne bilješke (ne objavljuju se na webu)
+OBJAVE-tekstovi.md
+PROMPTOVI-za-slike.md
+REELS-scenariji.md
+UPUTE-wordpress.md
+UPUTE-github.md
+
+# Privremene datoteke / testni screenshotovi
+_*
+*.tmp
+.DS_Store
+Thumbs.db

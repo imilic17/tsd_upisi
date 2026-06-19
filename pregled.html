@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upisi 2026./2027. – Tehnička škola Daruvar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="site">
+
+<header class="site-head">
+  <div class="logo"><img src="slike/tsd-logo.png" alt="TŠD"></div>
+  <div>
+    <h1>Upiši se u Tehničku školu Daruvar</h1>
+    <p>Zanimanja za školsku godinu <b id="god"></b> · odaberi sektor ili razinu</p>
+  </div>
+  <div class="sl">Stvaraj budućnost</div>
+</header>
+
+<div class="wrap">
+  <a class="upis-cta" href="upisi-2026.html" target="_blank">📋 Rokovi, dokumenti i upute za upis &rarr;</a>
+
+  <div class="filters">
+    <p class="hint">Filtriraj zanimanja po razini ili sektoru — popis ispod se odmah suzi. Klikni „Sve” / „Svi sektori” za povratak svih.</p>
+    <div class="row">
+      <span class="lab">Razina</span>
+      <button class="chip raz on" data-raz="sve">Sve</button>
+      <button class="chip raz" data-raz="cetiri">Četverogodišnja</button>
+      <button class="chip raz" data-raz="tri">Trogodišnja</button>
+    </div>
+    <div class="row" id="sekrow">
+      <span class="lab">Sektor</span>
+      <button class="chip sek on" data-sek="sve">Svi sektori</button>
+    </div>
+  </div>
+
+  <div class="rescount" id="rescount"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+  document.getElementById("god").textContent = UPIS.godina;
+
+  /* sektorski chipovi (s bojom i brojem zanimanja) */
+  const sekrow = document.getElementById("sekrow");
+  document.querySelector('.chip.sek[data-sek="sve"]').textContent = "Svi sektori (" + REDOSLIJED.length + ")";
+  Object.keys(SEKTORI).forEach(k=>{
+    const n = REDOSLIJED.filter(s=>ZANIMANJA[s].sektor===k).length;
+    const b = document.createElement("button");
+    b.className = "chip sek"; b.dataset.sek = k;
+    b.textContent = SEKTORI[k].naziv + " (" + n + ")";
+    b.style.setProperty("--c", SEKTORI[k].accent);
+    sekrow.appendChild(b);
+  });
+
+  /* kartice */
+  const grid = document.getElementById("grid");
+  REDOSLIJED.forEach(slug=>{
+    const z = ZANIMANJA[slug], sek = SEKTORI[z.sektor];
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.setProperty("--c", sek.accent);
+    card.dataset.sek = z.sektor;
+    card.dataset.raz = z.razina;
+    card.innerHTML = `
+      <div class="pic"><img src="slike/${slug}.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+        <span class="yr">${z.godine} god. · ${z.mjesta} mjesta</span></div>
+      <div class="c-body">
+        <span class="sek">${sek.naziv}</span>
+        <h3>${z.naziv}</h3>
+        <p class="one">${z.sto[0]}.</p>
+        <div class="acts">
+          <a class="prim" href="plakat.html?z=${slug}" target="_blank">Pogledaj detalje →</a>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  /* filtriranje */
+  let fRaz = "sve", fSek = "sve";
+  const rc = document.getElementById("rescount");
+  function resetFilters(){
+    fRaz = "sve"; fSek = "sve";
+    document.querySelectorAll(".chip.raz").forEach(b=>b.classList.toggle("on", b.dataset.raz==="sve"));
+    document.querySelectorAll(".chip.sek").forEach(b=>b.classList.toggle("on", b.dataset.sek==="sve"));
+    apply();
+  }
+  function apply(){
+    let vidljivih = 0;
+    document.querySelectorAll(".card").forEach(c=>{
+      const ok = (fRaz==="sve"||c.dataset.raz===fRaz) && (fSek==="sve"||c.dataset.sek===fSek);
+      c.style.display = ok ? "" : "none";
+      if(ok) vidljivih++;
+    });
+    let e = document.querySelector(".empty");
+    if(vidljivih===0){ if(!e){e=document.createElement("div");e.className="empty";
+      e.textContent="Nema zanimanja za odabrani filter. Klikni „Poništi filtere”.";grid.appendChild(e);} }
+    else if(e){ e.remove(); }
+
+    const filtrirano = (fRaz!=="sve" || fSek!=="sve");
+    rc.innerHTML = `Prikazano: ${vidljivih} od ${REDOSLIJED.length} zanimanja`
+      + (filtrirano ? ` <a href="#" id="reset">✕ Poništi filtere</a>` : "");
+    const r = document.getElementById("reset");
+    if(r) r.addEventListener("click", ev=>{ ev.preventDefault(); resetFilters(); });
+  }
+  function bind(sel, set){
+    document.querySelectorAll(sel).forEach(btn=>btn.addEventListener("click",()=>{
+      document.querySelectorAll(sel).forEach(b=>b.classList.remove("on"));
+      btn.classList.add("on"); set(btn); apply();
+    }));
+  }
+  bind(".chip.raz", b=>fRaz=b.dataset.raz);
+  bind(".chip.sek", b=>fSek=b.dataset.sek);
+  apply();
+</script>
+</body>
+</html>

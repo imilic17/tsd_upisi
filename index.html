@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plakati za upis – Tehnička škola Daruvar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="index">
+  <h1>Plakati za upis 2026./2027.</h1>
+  <p>Klikni plakat da ga otvoriš, pa <b>Ctrl+P → Spremi kao PDF</b> (veličina A3, margine: nema) za tisak,
+     ili napravi screenshot za društvene mreže. Sav tekst i datumi uređuju se u datoteci <b>data.js</b>.</p>
+
+  <h2>Po zanimanju</h2>
+  <div class="links" id="zanimanja"></div>
+
+  <h2>Sektorski (pregled)</h2>
+  <div class="links" id="sektori"></div>
+
+  <h2>Po razini</h2>
+  <div class="links" id="razine"></div>
+
+  <h2>Informativni</h2>
+  <div class="links" id="info"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+  const link = (href,naslov,opis) => `<a href="${href}">${naslov}<span>${opis}</span></a>`;
+  document.getElementById("zanimanja").innerHTML = REDOSLIJED.map(s=>{
+    const z = ZANIMANJA[s];
+    return link(`plakat.html?z=${s}`, z.naziv, SEKTORI[z.sektor].naziv+" · "+z.godine+" god.");
+  }).join("");
+  document.getElementById("sektori").innerHTML = Object.keys(SEKTORI).map(k=>{
+    const broj = REDOSLIJED.filter(s=>ZANIMANJA[s].sektor===k).length;
+    return link(`sektor.html?s=${k}`, SEKTORI[k].naziv, broj+" zanimanj"+(broj===1?"e":"a"));
+  }).join("");
+  document.getElementById("razine").innerHTML =
+    link(`razina.html?r=cetiri`, "Četverogodišnja zanimanja", "tehničari") +
+    link(`razina.html?r=tri`, "Trogodišnja zanimanja", "strukovna zanimanja");
+  document.getElementById("info").innerHTML =
+    link(`upisi-2026.html`, "UPISI 2026.", "datumi, dokumenti, liječnički, kontakti") +
+    link(`pregled.html`, "Pregledna stranica (za web škole)", "galerija s filterom po sektoru i razini");
+</script>
+</body>
+</html>
