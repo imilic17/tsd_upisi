@@ -5,6 +5,34 @@ function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").repla
 function img(slug){ return "slike/"+slug+".jpg"; }
 function setVars(el,sek){ el.style.setProperty("--accent",sek.accent); el.style.setProperty("--dark",sek.dark); }
 
+/* Skalira fiksni plakat da stane na ekran (mobitel/tablet).
+   Ne dira tisak (print reset u CSS-u) ni izvoz kartica (body.export). */
+function fitPoster(){
+  if(document.body.classList.contains("export")) return;
+  const root = document.getElementById("root");
+  if(!root) return;
+  const poster = root.querySelector(".poster");
+  if(!poster) return;
+  poster.style.transform = "none";
+  root.style.cssText = "";
+  document.body.style.padding = "0";
+  const pw = poster.offsetWidth, ph = poster.offsetHeight;
+  const avail = Math.min(window.innerWidth || 99999, document.documentElement.clientWidth || 99999);
+  const scale = Math.min(1, (avail - 2) / pw);
+  if(scale < 1){
+    poster.style.transformOrigin = "top left";
+    poster.style.transform = "scale(" + scale + ")";
+    root.style.width = (pw*scale) + "px";
+    root.style.height = (ph*scale) + "px";
+    root.style.overflow = "hidden";
+    root.style.margin = "0 auto";
+  } else {
+    document.body.style.padding = "";
+  }
+}
+["DOMContentLoaded","load","resize","orientationchange"].forEach(e=>window.addEventListener(e, fitPoster));
+window.addEventListener("load", ()=>setTimeout(fitPoster, 150));
+
 function headHTML(){
   return `<header class="head">
     <div class="school">

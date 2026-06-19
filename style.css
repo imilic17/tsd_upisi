@@ -410,7 +410,9 @@ body.export{margin:0;padding:0;background:#fff;display:block}
 
 @media print{
   body{background:#fff;padding:0;gap:0;display:block}
-  .poster{box-shadow:none;page-break-after:always}
+  /* poništi skaliranje s ekrana – tisak je uvijek pun A3 */
+  #root{width:auto!important;height:auto!important;overflow:visible!important;margin:0!important}
+  .poster{box-shadow:none;page-break-after:always;transform:none!important}
   .index{display:none}
   @page{size:A3 portrait;margin:0}
 }
