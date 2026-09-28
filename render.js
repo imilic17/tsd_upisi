@@ -94,45 +94,49 @@ function uvjetiRows(z){
 }
 
 /* ---- Promotivna varijanta: bez rokova, kvota i uvjeta iz natječaja tekuće godine ---- */
-function footerPromo(){
-  return `<footer class="pfoot promo">
-    <div class="pf-cols">
-      <div class="pf-item">
-        <h5>Posjeti nas</h5>
-        <span class="big">${UPIS.adresa}</span>
-        <span class="row2">${UPIS.adresa2}</span>
-      </div>
-      <div class="pf-item">
-        <h5>Kontakt</h5>
-        <span class="big">${UPIS.tel}</span>
-        <span class="row2">ravnatelj@tsd.hr</span>
-      </div>
-      <div class="pf-item">
-        <h5>Više o školi</h5>
-        <span class="big">${UPIS.web}</span>
-      </div>
-    </div>
-    <div class="pf-qr"><img src="slike/qr-skola.png" alt="QR za www.tsd.hr"><span>Skeniraj<br>tsd.hr</span></div>
-  </footer>`;
-}
-
 function vazno(z){
   if(z.docs.startsWith("Rješenje"))
-    return `<div class="u-row">Program za učenike s <b>rješenjem o primjerenom programu obrazovanja</b> (uz stručno mišljenje HZZ-a).</div>`;
-  return `<div class="u-row"><b>Zdravstveni uvjet:</b> ${esc(z.docs)}</div>`;
+    return `Program za učenike s <b>rješenjem o primjerenom programu obrazovanja</b> (uz stručno mišljenje HZZ-a).`;
+  return `<b>Zdravstveni uvjet za upis:</b> ${esc(z.docs)}`;
+}
+
+function plakatPromoHTML(slug, fmt){
+  const z = ZANIMANJA[slug];
+  const tasks = z.sto.slice(0, 4).map(t=>`<li>${esc(t)}</li>`).join("");
+  const poslije = z.poslije ? `
+      <div class="poslije">
+        <div class="section-title">Što poslije?</div>
+        <div class="p-cols">
+          <div class="p-card"><h4>Gdje radiš</h4><p>${esc(z.poslije.rad)}</p></div>
+          <div class="p-card"><h4>${z.godine === 4 ? "Nastavak školovanja" : "Usavršavanje"}</h4><p>${esc(z.poslije.dalje || NASTAVAK_4)}</p></div>
+        </div>
+      </div>` : "";
+  return `<div class="poster promo${fmt ? " "+fmt : ""}" data-sek="${z.sektor}">
+    ${headHTML()}
+    <section class="hero">
+      <img src="${img(slug)}" alt="" onerror="this.style.display='none'">
+      <div class="titlewrap">
+        <div class="title">${esc(z.naziv)}</div>
+        ${z.udica ? `<div class="udica">${esc(z.udica)}</div>` : ""}
+      </div>
+    </section>
+    <main class="body">
+      <div>
+        <div class="section-title">U školi <span class="godine">· ${z.godine} godine</span></div>
+        <ul class="tasks">${tasks}</ul>
+      </div>
+      ${poslije}
+      <div class="vazno">${vazno(z)}</div>
+    </main>
+    <div class="endbar"></div>
+  </div>`;
 }
 
 /* ---- Individualni plakat ---- */
-function plakatHTML(slug, promo, fmt){
+function plakatHTML(slug, fmt){
   const z = ZANIMANJA[slug];
   const sek = SEKTORI[z.sektor];
   const tasks = z.sto.map(t=>`<li>${esc(t)}</li>`).join("");
-  const drugiBadge = promo
-    ? (z.novo ? `<div class="badge novo"><div><b>Novi</b><span>program</span></div></div>` : "")
-    : `<div class="badge"><div><b>${z.mjesta}</b><span>mjesta</span></div></div>`;
-  const okvir = promo
-    ? `<div class="section-title">Važno za upis</div><div class="uvjeti">${vazno(z)}</div>`
-    : `<div class="section-title">Uvjeti upisa</div><div class="uvjeti">${uvjetiRows(z)}</div>`;
   return `<div class="poster${fmt ? " "+fmt : ""}" data-sek="${z.sektor}">
     ${headHTML()}
     <section class="hero">
@@ -140,7 +144,7 @@ function plakatHTML(slug, promo, fmt){
       <img src="${img(slug)}" alt="" onerror="this.style.display='none'">
       <div class="badges">
         <div class="badge"><div><b>${z.godine}</b><span>godine</span></div></div>
-        ${drugiBadge}
+        <div class="badge"><div><b>${z.mjesta}</b><span>mjesta</span></div></div>
       </div>
       <div class="titlewrap">
         <span class="sector">${esc(sek.naziv)}</span>
@@ -152,9 +156,12 @@ function plakatHTML(slug, promo, fmt){
         <div class="section-title">Što radiš?</div>
         <ul class="tasks">${tasks}</ul>
       </div>
-      <div class="docs">${okvir}</div>
+      <div class="docs">
+        <div class="section-title">Uvjeti upisa</div>
+        <div class="uvjeti">${uvjetiRows(z)}</div>
+      </div>
     </main>
-    ${promo ? footerPromo() : footerPlakat()}
+    ${footerPlakat()}
   </div>`;
 }
 
@@ -164,14 +171,15 @@ function renderPlakat(){
   document.title = ZANIMANJA[slug].naziv + " – plakat";
   const fmt = ["kvadrat","portret","story","a4"].includes(qp("f")) ? qp("f") : "";
   const root = document.getElementById("root");
-  root.innerHTML = plakatHTML(slug, qp("v")==="promo", fmt);
+  root.innerHTML = qp("v")==="promo" ? plakatPromoHTML(slug, fmt) : plakatHTML(slug, fmt);
   setVars(root.querySelector(".poster"), SEKTORI[ZANIMANJA[slug].sektor]);
 }
 
-/* plakati-a4.html: svih 12 promotivnih plakata za ispis na A4 */
+/* plakati-a4.html[?z=slug1,slug2]: promotivni plakati za ispis na A4 (bez z = svih 12) */
 function renderPlakatiA4(){
+  const odabrani = (qp("z")||"").split(",").filter(s=>ZANIMANJA[s]);
   const root = document.getElementById("root");
-  root.innerHTML = REDOSLIJED.map(s=>plakatHTML(s, true, "a4")).join("");
+  root.innerHTML = (odabrani.length ? odabrani : REDOSLIJED).map(s=>plakatPromoHTML(s, "a4")).join("");
   root.querySelectorAll(".poster").forEach(p=>setVars(p, SEKTORI[p.dataset.sek]));
 }
 
