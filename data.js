@@ -39,16 +39,17 @@ const SEKTORI = {
 /* --- Zanimanja ---
    slug: naziv datoteke slike (slike/<slug>.jpg) i ključ u URL-u
    docs: što treba za upis (liječnički / potvrda / rješenje)
-   posebno: predmet od posebne važnosti + natjecanje (za 4-god.) ili "" */
+   posebno: predmet od posebne važnosti + natjecanje (za 4-god.) ili ""
+   novo: true -> oznaka "Novi program" na promotivnom plakatu */
 const ZANIMANJA = {
   programiranje: {
     naziv: "Tehničar/ka za programiranje",
-    sektor: "elektrotehnika", godine: 4, mjesta: 20, razina: "cetiri",
+    sektor: "elektrotehnika", godine: 4, mjesta: 20, razina: "cetiri", novo: true,
     sto: [
       "Programiraš u modernim programskim jezicima",
       "Izrađuješ aplikacije za web, desktop i mobitel",
       "Upravljaš bazama podataka i obradom podataka",
-      "Postavljaš i konfiguriraš računalne mreže i WiFi",
+      "Postavljaš i konfiguriraš računalne mreže i Wi-Fi",
       "Popravljaš i nadograđuješ računala",
       "Obrađuješ audio, video i 3D animacije"
     ],

@@ -416,3 +416,19 @@ body.export{margin:0;padding:0;background:#fff;display:block}
   .index{display:none}
   @page{size:A3 portrait;margin:0}
 }
+
+/* ---- Promotivni plakat (v=promo): bez rokova i kvota tekuće godine ---- */
+.badge.novo{background:var(--accent);color:#fff}
+.badge.novo b{font-size:30px;text-transform:uppercase;letter-spacing:.5px}
+.badge.novo span{color:#fff}
+.pfoot.promo{padding:8mm 16mm}
+.pfoot.promo .pf-cols{grid-template-columns:1.2fr 1fr 1fr;gap:4px 30px}
+.pfoot.promo .pf-item h5{font-size:17px}
+.pfoot.promo .pf-item .big{font-size:28px}
+.pfoot.promo .pf-item .row2{font-size:18px}
+.pfoot.promo .pf-qr img{width:118px;height:118px}
+.pfoot.promo .pf-qr span{font-size:13px}
+
+/* ---- A4 (f=a4): isti A3 raspored umanjen na A4 (210/297 = 0.7071) ---- */
+.poster.a4{zoom:.7071;page:a4}
+@page a4{size:A4 portrait;margin:0}

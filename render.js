@@ -93,21 +93,54 @@ function uvjetiRows(z){
   return rows.map(r=>`<div class="u-row"><b>${esc(r[0])}:</b> ${esc(r[1])}</div>`).join("");
 }
 
+/* ---- Promotivna varijanta: bez rokova, kvota i uvjeta iz natječaja tekuće godine ---- */
+function footerPromo(){
+  return `<footer class="pfoot promo">
+    <div class="pf-cols">
+      <div class="pf-item">
+        <h5>Posjeti nas</h5>
+        <span class="big">${UPIS.adresa}</span>
+        <span class="row2">${UPIS.adresa2}</span>
+      </div>
+      <div class="pf-item">
+        <h5>Kontakt</h5>
+        <span class="big">${UPIS.tel}</span>
+        <span class="row2">ravnatelj@tsd.hr</span>
+      </div>
+      <div class="pf-item">
+        <h5>Više o školi</h5>
+        <span class="big">${UPIS.web}</span>
+      </div>
+    </div>
+    <div class="pf-qr"><img src="slike/qr-skola.png" alt="QR za www.tsd.hr"><span>Skeniraj<br>tsd.hr</span></div>
+  </footer>`;
+}
+
+function vazno(z){
+  if(z.docs.startsWith("Rješenje"))
+    return `<div class="u-row">Program za učenike s <b>rješenjem o primjerenom programu obrazovanja</b> (uz stručno mišljenje HZZ-a).</div>`;
+  return `<div class="u-row"><b>Zdravstveni uvjet:</b> ${esc(z.docs)}</div>`;
+}
+
 /* ---- Individualni plakat ---- */
-function renderPlakat(){
-  const z = ZANIMANJA[qp("z")] || ZANIMANJA["mehatronika"];
+function plakatHTML(slug, promo, fmt){
+  const z = ZANIMANJA[slug];
   const sek = SEKTORI[z.sektor];
-  document.title = z.naziv + " – plakat";
   const tasks = z.sto.map(t=>`<li>${esc(t)}</li>`).join("");
-  const fmt = ["kvadrat","portret","story"].includes(qp("f")) ? " "+qp("f") : "";
-  const html = `<div class="poster${fmt}">
+  const drugiBadge = promo
+    ? (z.novo ? `<div class="badge novo"><div><b>Novi</b><span>program</span></div></div>` : "")
+    : `<div class="badge"><div><b>${z.mjesta}</b><span>mjesta</span></div></div>`;
+  const okvir = promo
+    ? `<div class="section-title">Važno za upis</div><div class="uvjeti">${vazno(z)}</div>`
+    : `<div class="section-title">Uvjeti upisa</div><div class="uvjeti">${uvjetiRows(z)}</div>`;
+  return `<div class="poster${fmt ? " "+fmt : ""}" data-sek="${z.sektor}">
     ${headHTML()}
     <section class="hero">
-      <div class="placeholder">FOTOGRAFIJA ZANIMANJA<br><small>${img(qp("z")||"mehatronika")}</small></div>
-      <img src="${img(qp("z")||"mehatronika")}" alt="" onerror="this.style.display='none'">
+      <div class="placeholder">FOTOGRAFIJA ZANIMANJA<br><small>${img(slug)}</small></div>
+      <img src="${img(slug)}" alt="" onerror="this.style.display='none'">
       <div class="badges">
         <div class="badge"><div><b>${z.godine}</b><span>godine</span></div></div>
-        <div class="badge"><div><b>${z.mjesta}</b><span>mjesta</span></div></div>
+        ${drugiBadge}
       </div>
       <div class="titlewrap">
         <span class="sector">${esc(sek.naziv)}</span>
@@ -119,16 +152,27 @@ function renderPlakat(){
         <div class="section-title">Što radiš?</div>
         <ul class="tasks">${tasks}</ul>
       </div>
-      <div class="docs">
-        <div class="section-title">Uvjeti upisa</div>
-        <div class="uvjeti">${uvjetiRows(z)}</div>
-      </div>
+      <div class="docs">${okvir}</div>
     </main>
-    ${footerPlakat()}
+    ${promo ? footerPromo() : footerPlakat()}
   </div>`;
+}
+
+/* plakat.html?z=<slug>[&f=kvadrat|portret|story|a4][&v=promo] */
+function renderPlakat(){
+  const slug = ZANIMANJA[qp("z")] ? qp("z") : "mehatronika";
+  document.title = ZANIMANJA[slug].naziv + " – plakat";
+  const fmt = ["kvadrat","portret","story","a4"].includes(qp("f")) ? qp("f") : "";
   const root = document.getElementById("root");
-  root.innerHTML = html;
-  setVars(root.querySelector(".poster"), sek);
+  root.innerHTML = plakatHTML(slug, qp("v")==="promo", fmt);
+  setVars(root.querySelector(".poster"), SEKTORI[ZANIMANJA[slug].sektor]);
+}
+
+/* plakati-a4.html: svih 12 promotivnih plakata za ispis na A4 */
+function renderPlakatiA4(){
+  const root = document.getElementById("root");
+  root.innerHTML = REDOSLIJED.map(s=>plakatHTML(s, true, "a4")).join("");
+  root.querySelectorAll(".poster").forEach(p=>setVars(p, SEKTORI[p.dataset.sek]));
 }
 
 /* ---- Naslovna (cover) kvadratna slika za kampanju ---- */
