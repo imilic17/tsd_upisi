@@ -40,7 +40,7 @@ const SEKTORI = {
    slug: naziv datoteke slike (slike/<slug>.jpg) i ključ u URL-u
    docs: što treba za upis (liječnički / potvrda / rješenje)
    posebno: predmet od posebne važnosti + natjecanje (za 4-god.) ili ""
-   udica, poslije {rad, dalje}: tekstovi za promotivni plakat (v=promo) */
+   poslije {rad, dalje}: tekstovi za promotivni plakat (v=promo) */
 const ZANIMANJA = {
   programiranje: {
     naziv: "Tehničar/ka za programiranje",
@@ -56,7 +56,6 @@ const ZANIMANJA = {
     docs: "Potvrda nadležnog školskog liječnika",
     predmet: "Kemija", natjecanje: "Natjecanje iz geografije",
     jezici: "Engleski ili njemački",
-    udica: "Od ideje do aplikacije na tvom mobitelu",
     poslije: { rad: "Programer/ka, web developer, administrator/ica računalnih mreža, serviser/ka računala" }
   },
   mehatronika: {
@@ -73,7 +72,6 @@ const ZANIMANJA = {
     docs: "Liječnička svjedodžba medicine rada",
     predmet: "Kemija", natjecanje: "Natjecanje iz geografije",
     jezici: "Engleski ili njemački",
-    udica: "Roboti, senzori i automatizacija na jednom mjestu",
     poslije: { rad: "Automatizacija i robotika u industriji, održavanje proizvodnih linija, servis mehatroničkih sustava" }
   },
   elektronika: {
@@ -90,7 +88,6 @@ const ZANIMANJA = {
     docs: "Potvrda nadležnog školskog liječnika",
     predmet: "Kemija", natjecanje: "Natjecanje iz geografije",
     jezici: "Engleski ili njemački",
-    udica: "Znaš što je unutar svakog uređaja",
     poslije: { rad: "Servisi elektroničke opreme, telekomunikacije, proizvodnja i ispitivanje elektroničkih uređaja" }
   },
   elektroinstalater: {
@@ -107,7 +104,6 @@ const ZANIMANJA = {
     docs: "Liječnička svjedodžba medicine rada",
     predmet: "", natjecanje: "Natjecanje mladih tehničara",
     jezici: "Engleski ili njemački",
-    udica: "Donosiš struju, svjetlo i sunčevu energiju u domove",
     poslije: { rad: "Elektroinstalaterski obrti i tvrtke, gradilišta, montaža solarnih elektrana, održavanje u industriji",
                dalje: "S iskustvom možeš položiti majstorski ispit i otvoriti vlastiti obrt." }
   },
@@ -124,7 +120,6 @@ const ZANIMANJA = {
     docs: "Liječnička svjedodžba medicine rada",
     predmet: "", natjecanje: "Natjecanje mladih tehničara",
     jezici: "Engleski ili njemački",
-    udica: "Iz komada metala izrađuješ precizan dio",
     poslije: { rad: "Metaloprerađivačke tvrtke, pogoni CNC obrade, proizvodnja strojnih dijelova",
                dalje: "Usavršavaš se u CNC programiranju i radu na modernim strojevima." }
   },
@@ -141,7 +136,6 @@ const ZANIMANJA = {
     docs: "Liječnička svjedodžba medicine rada",
     predmet: "", natjecanje: "Natjecanje mladih tehničara",
     jezici: "Engleski ili njemački",
-    udica: "Grijanje, hlađenje i voda: sve što čini dom ugodnim",
     poslije: { rad: "Instalaterski obrti i tvrtke, gradilišta, montaža i servis klima uređaja i sustava grijanja",
                dalje: "S iskustvom možeš položiti majstorski ispit i otvoriti vlastiti obrt." }
   },
@@ -158,7 +152,6 @@ const ZANIMANJA = {
     docs: "Liječnička svjedodžba medicine rada",
     predmet: "", natjecanje: "Natjecanje mladih tehničara",
     jezici: "Engleski ili njemački",
-    udica: "Mehaničar i električar za vozila u jednom",
     poslije: { rad: "Autoservisi i ovlašteni servisi vozila, servisi voznih parkova prijevozničkih tvrtki",
                dalje: "S iskustvom možeš položiti majstorski ispit i otvoriti vlastiti obrt." }
   },
@@ -175,7 +168,6 @@ const ZANIMANJA = {
     docs: "Potvrda nadležnog školskog liječnika",
     predmet: "Kemija", natjecanje: "Natjecanje iz geografije",
     jezici: "Engleski ili njemački",
-    udica: "Planiraš kako ljudi i roba stižu na cilj",
     poslije: { rad: "Prijevozničke, špediterske i logističke tvrtke, dispečerski poslovi, organizacija javnog prijevoza" }
   },
   vozac: {
@@ -191,7 +183,6 @@ const ZANIMANJA = {
     docs: "Liječnička svjedodžba medicine rada (vozači II. skupine)",
     predmet: "", natjecanje: "Natjecanje mladih tehničara",
     jezici: "Engleski ili njemački",
-    udica: "Vozačke kategorije stječeš već tijekom školovanja",
     poslije: { rad: "Vozač/ica u prijevozničkim i logističkim tvrtkama, distribuciji robe te komunalnim i javnim poduzećima",
                dalje: "Stječeš dodatne kvalifikacije za profesionalne vozače. Naša škola provodi i periodičku izobrazbu vozača." }
   },
@@ -208,7 +199,6 @@ const ZANIMANJA = {
     docs: "Rješenje o primjerenom programu obrazovanja + stručno mišljenje HZZ-a",
     predmet: "", natjecanje: "",
     jezici: "",
-    udica: "Od namirnice do tanjura",
     poslije: { rad: "Pomoćni poslovi u kuhinjama restorana, hotela, škola i bolnica",
                dalje: "Radom i iskustvom stječeš sve više samostalnosti u kuhinji." }
   },
@@ -225,7 +215,6 @@ const ZANIMANJA = {
     docs: "Rješenje o primjerenom programu obrazovanja + stručno mišljenje HZZ-a",
     predmet: "", natjecanje: "",
     jezici: "",
-    udica: "Od daske do komada namještaja",
     poslije: { rad: "Pomoćni poslovi u stolarskim radionicama i tvornicama namještaja",
                dalje: "Radom i iskustvom stječeš sve više samostalnosti u radionici." }
   },
@@ -242,7 +231,6 @@ const ZANIMANJA = {
     docs: "Rješenje o primjerenom programu obrazovanja + stručno mišljenje HZZ-a",
     predmet: "", natjecanje: "",
     jezici: "",
-    udica: "Uređuješ prostore u kojima ljudi žive i rade",
     poslije: { rad: "Pomoćni poslovi u soboslikarskim obrtima i građevinskim tvrtkama",
                dalje: "Radom i iskustvom stječeš sve više samostalnosti na poslu." }
   }

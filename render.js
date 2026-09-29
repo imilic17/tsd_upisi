@@ -117,7 +117,6 @@ function plakatPromoHTML(slug, fmt){
       <img src="${img(slug)}" alt="" onerror="this.style.display='none'">
       <div class="titlewrap">
         <div class="title">${esc(z.naziv)}</div>
-        ${z.udica ? `<div class="udica">${esc(z.udica)}</div>` : ""}
       </div>
     </section>
     <main class="body">
